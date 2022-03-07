@@ -1,21 +1,20 @@
 package AppSystem;
 
+import Util.Time;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.MemoryStack;
 
-import java.nio.IntBuffer;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class Window {
     private final int width, height;
     private final String title;
     private long glfwWindow;
+    private static Scene currentScene;
 
     //Singleton
     private static Window window = null;
@@ -25,6 +24,21 @@ public class Window {
         this.width = 1920/2;
         this.height = 1080/2;
         this.title = "MyGame";
+    }
+
+    public static void changeScene(int newScene){
+        switch (newScene){
+            case 0:
+                currentScene = new  LevelEditorScene();
+                break;
+//                currentScene.inin();
+            case 1:
+                currentScene = new LevelScene();
+                break;
+            default:
+                assert false: "Unknown scene - " + newScene;
+                break;
+        }
     }
 
     public static Window get(){
@@ -89,9 +103,15 @@ public class Window {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
+
+        Window.changeScene(0);
     }
 
     private void loop() {
+        float beginTime = Time.getTime();
+        float endTime;
+        float dt = -1.0f;
+
         while ( !glfwWindowShouldClose(glfwWindow) ) {
             // Poll for window events.
             glfwPollEvents();
@@ -100,7 +120,15 @@ public class Window {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
+            if(dt >= 0){
+                currentScene.update(dt);
+            }
+
             glfwSwapBuffers(glfwWindow); // swap the color buffers
+
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
     }
 }
