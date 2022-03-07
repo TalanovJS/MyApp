@@ -30,10 +30,11 @@ public class Window {
         switch (newScene){
             case 0:
                 currentScene = new  LevelEditorScene();
+                currentScene.init();
                 break;
-//                currentScene.inin();
             case 1:
                 currentScene = new LevelScene();
+                currentScene.init();
                 break;
             default:
                 assert false: "Unknown scene - " + newScene;
@@ -60,7 +61,7 @@ public class Window {
 
         // Terminate GLFW and the free the error callback
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        glfwSetErrorCallback(null);
     }
 
     private void init() {
@@ -91,6 +92,7 @@ public class Window {
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
+
         // Enable v-sync
         glfwSwapInterval(1);
 
