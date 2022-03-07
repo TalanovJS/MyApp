@@ -6,7 +6,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 public class MouseListener {
     private double scrollX, scrollY;
     private double posX, posY, lastX, lastY;
-    private boolean mouseButtonPressed[] = new boolean[3];
+    private boolean[] mouseButtonPressed = new boolean[3];
     private boolean isDrag;
 
     //Singleton
